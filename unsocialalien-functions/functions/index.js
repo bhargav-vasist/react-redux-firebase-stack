@@ -23,3 +23,23 @@ exports.getPosts = functions.https.onRequest((req, res) => {
             console.error(err)
         })
 })
+
+exports.createPosts = functions.https.onRequest((req, res) => {
+    const newPost = {
+        body: req.body.body,
+        userHandle: req.body.userHandle,
+        createdAt: admin.firestore.Timestamp.fromDate(new Date())
+    }
+    console.log(req , "HArry Potter")
+
+    admin
+        .firestore()
+        .collection('alien-posts')
+        .add(newPost)
+        .then(doc =>{
+            res.json(`this ${doc.id} is succesfull`)
+        })
+        .catch(err =>{
+            res.status(500).json({error: 'server not working'})
+        })
+});
