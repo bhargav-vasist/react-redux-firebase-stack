@@ -67,7 +67,8 @@ node_modules/
 # idea(workspace files) file
 .idea
 
-#ignorning node modules
+# ignorning node modules
 /node_modules
 
-
+# Random MacOS file
+.DS_Store
