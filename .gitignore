@@ -70,5 +70,5 @@ node_modules/
 # ignorning node modules
 /node_modules
 
-# Random MacOS file
+# ignoring random MacOS file
 .DS_Store
