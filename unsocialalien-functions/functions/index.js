@@ -20,6 +20,9 @@ const app = express()
 const firebase = require('firebase')
 firebase.initializeApp(firebaseConfig)
 
+/*const firebase = require('firebase')
+firebase.initializeApp(firebaseConfig)*/
+
 
 app.get('/posts', (req, res) => {
     admin.firestore().collection('alien-posts').get()
@@ -66,12 +69,14 @@ app.post('/signUp', (req, res) => {
         handle: req.body.handle,
     }
 
-    firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password)
-        .then(data => {
+    firebase
+        .auth()
+        .createUserWithEmailAndPassword(newUser.email, newUser.password)
+        .then((data) =>{
             return res.status(201).json({message: `user ${data.user.uid} successfully created`})
         })
-        .catch(err => {
-            return res.status(500).json({error:'internal error'})
+        .catch((err)=>{
+            return res.status(500).json({error:err.code})
         })
 })
 
