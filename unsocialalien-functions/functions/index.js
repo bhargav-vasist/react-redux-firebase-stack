@@ -51,11 +51,14 @@ app.get("/posts", (req, res) => {
 const FbAuth = (req, res, next) => {
     let idToken;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        idToken = req.headers.authorization.split(`Bearer /`)[1]
+        console.log(req.headers.authorization,"nush")
+        idToken = req.headers.authorization.split(`Bearer `)[1]
     } else {
         console.error('No token found')
         return res.status(403).json({error: 'Unauthorized error'})
     }
+
+    console.log(idToken)
 
     admin.auth().verifyIdToken(idToken)
         .then(decodedToken => {
@@ -66,7 +69,7 @@ const FbAuth = (req, res, next) => {
                 .limit(1)
                 .get()
         })
-        .then(data => {
+        .then((data) => {
             req.user.handle = data.docs[0].data().handle
             return next()
         })
