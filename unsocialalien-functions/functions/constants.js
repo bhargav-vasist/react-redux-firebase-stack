@@ -1,1 +1,3 @@
-export const PASSWORD_ERROR = 'auth/wrong-password'
+module.exports = {
+  PASSWORD_ERROR: "auth/wrong-password"
+};
