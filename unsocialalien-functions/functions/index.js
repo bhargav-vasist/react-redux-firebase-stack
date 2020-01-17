@@ -1,4 +1,8 @@
+// import {PASSWORD_ERROR} from './constants'
+import * as constantTypes from './constants'
+
 const functions = require('firebase-functions');
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyDwJJX0qaLg9sHSzLPFF4TKsbUK5L_c1VA",
@@ -159,7 +163,7 @@ app.post(`/logIn`,(req,res) =>{
         })
         .catch(err =>{
             console.log(err.code)
-            if(err.code === 'auth/wrong-password'){
+            if(err.code === constantTypes.PASSWORD_ERROR){
                 return res.status(403).json({error : 'Wrong password credentials' })
             }else return res.status(500).json({error :err.code})
         })
