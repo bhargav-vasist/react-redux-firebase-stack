@@ -7,7 +7,7 @@ const app = express();
 const FbAuth = require('./util/fbAuth');
 
 const {getAllPosts, postOnePost} = require('./handlers/posts');
-const {signUp, login} = require('./handlers/users');
+const {signUp, login, uploadImage} = require('./handlers/users');
 
 //Post Routes
 console.log(getAllPosts);
@@ -17,5 +17,6 @@ app.post('/post', FbAuth, postOnePost);
 //User Routes
 app.post('/signUp', signUp);
 app.post(`/logIn`, login);
+app.post(`/user/upload`, uploadImage);
 
 exports.api = functions.https.onRequest(app);
