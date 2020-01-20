@@ -1,4 +1,5 @@
 const {db, admin} = require('../util/admin');
+const constantTypes = require('../constants');
 
 const firebaseConfig = require('../util/firebaseConfig');
 
@@ -122,6 +123,7 @@ exports.uploadImage = (req, res) => {
       mimetype: mimetype,
     });
     const imageExtension = filename.split('.')[filename.split('.').length - 1];
+    console.log(imageExtension, 'this is the file extension');
     //777872738788.png
     imageFileName = `${Math.round(
       Math.random() * 100000000000,
