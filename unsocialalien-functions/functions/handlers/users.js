@@ -105,7 +105,7 @@ exports.addUserDetails = (req, res) => {
     });
 };
 
-//Upload a profile image for the user
+// Upload a profile image for the user
 exports.uploadImage = (req, res) => {
   const Busboy = require('busboy');
   const path = require('path');
@@ -157,7 +157,7 @@ exports.uploadImage = (req, res) => {
         return res.status(500).json({error: err.code});
       });
   });
-  busboy.end(raw.rawBody);
+  busboy.end(req.rawBody);
 };
 
 //Get own users Details
