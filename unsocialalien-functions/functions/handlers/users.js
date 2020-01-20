@@ -151,7 +151,7 @@ exports.uploadImage = (req, res) => {
         return res.join({message: 'Image uploaded Succesfully'});
       })
       .catch(err => {
-        console.error(err);
+        console.error(err, 'is this the error ');
         return res.status(500).json({error: err.code});
       });
   });

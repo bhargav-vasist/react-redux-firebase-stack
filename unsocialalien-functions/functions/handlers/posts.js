@@ -20,7 +20,7 @@ exports.getAllPosts = (req, res) => {
     });
 };
 
-exports.postOnePost = (req, res) => {
+exports.postSinglePost = (req, res) => {
   if (req.body.body.trim() === '') {
     return res.status(400).json({body: 'Body shouldnt be empty'});
   }
