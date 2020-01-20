@@ -56,7 +56,7 @@ exports.signUp = (req, res) => {
       return res.status(201).json({token});
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       if (err.code === constantTypes.PASSWORD_ERROR) {
         return res.status(400).json({email: 'email already in use'});
       } else {
@@ -83,7 +83,7 @@ exports.login = (req, res) => {
       return res.json({token});
     })
     .catch(err => {
-      console.log(err.code);
+      console.error(err.code);
       if (err.code === constantTypes.PASSWORD_ERROR) {
         return res.status(403).json({error: 'Wrong password credentials'});
       } else return res.status(500).json({error: err.code});
@@ -117,18 +117,11 @@ exports.uploadImage = (req, res) => {
   let imageFileToBeUploaded = {};
 
   busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
-    console.log({
-      fieldname: fieldname,
-      filename: filename,
-      mimetype: mimetype,
-    });
     const imageExtension = filename.split('.')[filename.split('.').length - 1];
-    console.log(imageExtension, 'this is the file extension');
     //777872738788.png
     imageFileName = `${Math.round(
       Math.random() * 100000000000,
     )}.${imageExtension}`;
-    console.log(imageFileName, 'Im here tsting stuff');
     const filepath = path.join(os.tmpdir(), imageFileName);
     imageFileToBeUploaded = {filepath, mimetype};
     file.pipe(fs.createWriteStream(filepath));
@@ -150,7 +143,7 @@ exports.uploadImage = (req, res) => {
         return db.doc(`/users/${req.user.handle}`).update({imageUrl});
       })
       .then(() => {
-        return res.join({message: 'Image uploaded Succesfully'});
+        return res.json({message: 'Image uploaded Succesfully'});
       })
       .catch(err => {
         console.error(err, 'is this the error ');

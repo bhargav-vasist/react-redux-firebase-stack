@@ -6,21 +6,17 @@ module.exports = (req, res, next) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer ')
   ) {
-    console.log(req.headers.authorization, 'nush');
     idToken = req.headers.authorization.split(`Bearer `)[1];
   } else {
     console.error('No token found');
     return res.status(403).json({error: 'Unauthorized error'});
   }
 
-  console.log(idToken);
-
   admin
     .auth()
     .verifyIdToken(idToken)
     .then(decodedToken => {
       req.user = decodedToken;
-      console.log(decodedToken);
       return db
         .collection('users')
         .where('userId', '==', req.user.uid)
