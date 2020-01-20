@@ -94,7 +94,7 @@ exports.login = (req, res) => {
 exports.addUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body);
 
-  db.doc(`/users/${req.body.handle}`)
+  db.doc(`/users/${req.user.handle}`)
     .update(userDetails)
     .then(() => {
       return res.json({message: 'Details are added successfully'});
