@@ -42,7 +42,7 @@ exports.signUp = (req, res) => {
         handle: newUser.handle,
         email: newUser.email,
         createdAt: new Date().toISOString(),
-        imageUrl: `https://firebasestorage.googleapis.com/v0/b${firebaseConfig.storageBucket}/o/${noImage}?alt=media`,
+        imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${noImage}?alt=media`,
         userId,
       };
       db.doc(`users/${newUser.handle}`).set(userCredentials);
@@ -95,21 +95,23 @@ exports.uploadImage = (req, res) => {
   let imageFileName;
   let imageFileToBeUploaded = {};
 
-  busboy.on(`file`, (fieldname, file, filename, encoding, mimetype) => {
+  busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
     console.log({
       fieldname: fieldname,
       filename: filename,
       mimetype: mimetype,
     });
     const imageExtension = filename.split('.')[filename.split('.').length - 1];
-    imageFileName = `${Math.random(
-      Math.random() * 10000000000,
+    //777872738788.png
+    imageFileName = `${Math.round(
+      Math.random() * 100000000000,
     )}.${imageExtension}`;
+    console.log(imageFileName, 'Im here tsting stuff');
     const filepath = path.join(os.tmpdir(), imageFileName);
-    imageFileToBeUploaded = {filename, mimetype};
+    imageFileToBeUploaded = {filepath, mimetype};
     file.pipe(fs.createWriteStream(filepath));
   });
-  busboy.on(`finish`, () => {
+  busboy.on('finish', () => {
     admin
       .storage()
       .bucket()
@@ -122,15 +124,16 @@ exports.uploadImage = (req, res) => {
         },
       })
       .then(() => {
-        const imageUrl = `https://firebasestorage.googleapis.com/v0/b${firebaseConfig.storageBucket}/o/${imageFileName}?alt=media`;
-        return db.doc(`users/${req.user.handle}`).update({imageUrl});
+        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${imageFileName}?alt=media`;
+        return db.doc(`/users/${req.user.handle}`).update({imageUrl});
       })
       .then(() => {
         return res.join({message: 'Image uploaded Succesfully'});
       })
       .catch(err => {
         console.error(err);
-        return res.status(500).json({err: err.code});
+        return res.status(500).json({error: err.code});
       });
   });
+  busboy.end(raw.rawBody);
 };

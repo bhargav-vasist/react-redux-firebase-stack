@@ -16,7 +16,7 @@ app.post('/post', FbAuth, postOnePost);
 
 //User Routes
 app.post('/signUp', signUp);
-app.post(`/logIn`, login);
-app.post(`/user/upload`, uploadImage);
+app.post(`/login`, login);
+app.post(`/user/image`, FbAuth, uploadImage);
 
 exports.api = functions.https.onRequest(app);
