@@ -1,4 +1,4 @@
-const {db} = require('../util/admin');
+const {db, admin} = require('../util/admin');
 
 exports.getAllPosts = (req, res) => {
   db.collection('alien-posts')
@@ -40,8 +40,8 @@ exports.postSinglePost = (req, res) => {
 };
 
 exports.getPost = (req, res) => {
-  const postData = {};
-  db.doc(`/posts/${req.params.postId}`)
+  let postData = {};
+  db.doc(`/alien-posts/${req.params.postId}`)
     .get()
     .then(doc => {
       if (!doc.exists) {
@@ -57,7 +57,7 @@ exports.getPost = (req, res) => {
     .then(data => {
       postData.comments = [];
       data.forEach(doc => {
-        postData.comments.push(doc.push());
+        postData.comments.push(doc.data());
       });
       return res.json(postData);
     })

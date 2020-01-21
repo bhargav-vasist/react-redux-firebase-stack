@@ -6,7 +6,7 @@ const app = express();
 
 const FbAuth = require('./util/fbAuth');
 
-const {getAllPosts, postSinglePost} = require('./handlers/posts');
+const {getAllPosts, postSinglePost, getPost} = require('./handlers/posts');
 const {
   signUp,
   login,
@@ -19,6 +19,7 @@ const {
 console.log(getAllPosts);
 app.get('/posts', getAllPosts);
 app.post('/post', FbAuth, postSinglePost);
+app.get('/post/:postId', getPost);
 
 //User Routes
 app.post('/signup', signUp);
