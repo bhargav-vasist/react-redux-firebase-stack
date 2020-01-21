@@ -1,4 +1,4 @@
-const {db} = require('../util/admin');
+const {db, admin} = require('../util/admin');
 
 exports.getAllPosts = (req, res) => {
   db.collection('alien-posts')
@@ -20,7 +20,7 @@ exports.getAllPosts = (req, res) => {
     });
 };
 
-exports.postOnePost = (req, res) => {
+exports.postSinglePost = (req, res) => {
   if (req.body.body.trim() === '') {
     return res.status(400).json({body: 'Body shouldnt be empty'});
   }
@@ -36,5 +36,61 @@ exports.postOnePost = (req, res) => {
     })
     .catch(err => {
       res.status(500).json({error: 'server not working'});
+    });
+};
+//get single post
+exports.getPost = (req, res) => {
+  let postData = {};
+  db.doc(`/alien-posts/${req.params.postId}`) //are params and body same?
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({error: 'post not found'});
+      }
+      postData = doc.data(); //data transfer?
+      postData.postId = doc.id;
+      return db
+        .collection('comments')
+        .orderBy('createdAt', 'desc')
+        .where('postId', '==', req.params.postId)
+        .get();
+    })
+    .then(data => {
+      postData.comments = [];
+      data.forEach(doc => {
+        postData.comments.push(doc.data());
+      });
+      return res.json(postData);
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({error: err.code});
+    });
+};
+//post comment on a post
+exports.commentOnPost = (req, res) => {
+  if (req.body.body.trim() === '')
+    return res.status(400).json({error: 'this should not be empty'});
+  const newComment = {
+    body: req.body.body,
+    createdAt: new Date().toISOString(),
+    postId: req.params.postId,
+    userHandle: req.user.handle,
+    userImage: req.user.imageUrl,
+  };
+  db.doc(`/alien-posts/${req.params.postId}`)
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({error: 'post not found'});
+      }
+      return db.collection('comments').add(newComment);
+    })
+    .then(() => {
+      return res.json(newComment);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({error: err.code});
     });
 };
