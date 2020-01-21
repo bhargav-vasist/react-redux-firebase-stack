@@ -11,6 +11,8 @@ const {
   postSinglePost,
   getPost,
   commentOnPost,
+  likePost,
+  unlikePost,
 } = require('./handlers/posts');
 const {
   signUp,
@@ -25,7 +27,9 @@ console.log(getAllPosts);
 app.get('/posts', getAllPosts);
 app.post('/post', FbAuth, postSinglePost);
 app.get('/post/:postId', getPost);
-app.post(`/post/:postId/comment`, FbAuth, commentOnPost);
+app.post('/post/:postId/comment', FbAuth, commentOnPost);
+app.post('/post/:postId/like', FbAuth, likePost);
+app.post('/post/:postId/unlike', FbAuth, unlikePost);
 
 //User Routes
 app.post('/signup', signUp);
