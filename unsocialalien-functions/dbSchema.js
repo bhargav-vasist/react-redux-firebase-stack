@@ -21,6 +21,14 @@ let db = {
       commentCount: 3,
     },
   ],
+  comments: [
+    {
+      userHandle: 'user',
+      postId: 'TIAdUWnVGFnDRLUqzaMx',
+      body: 'body of the comment',
+      createdAt: 'January 21, 2020 at 12:01:00 AM UTC+5:30',
+    },
+  ],
 };
 const userDetails = {
   // Redux Data
